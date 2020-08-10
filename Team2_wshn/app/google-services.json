@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "810589360345",
+    "firebase_url": "https://loginex-67236.firebaseio.com",
+    "project_id": "loginex-67236",
+    "storage_bucket": "loginex-67236.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810589360345:android:d2055e466c501e552aaec8",
+        "android_client_info": {
+          "package_name": "com.example.test1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "810589360345-5n8r1dum3eej2aerv17vuggbhrbtu6r6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.test1",
+            "certificate_hash": "6923c71862e496c6283f4f688f833302088dad96"
+          }
+        },
+        {
+          "client_id": "810589360345-5maeu5k3k6j52u7vbmm2kt91q6pnselp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz-e-MWs67Z9ltDn7ggBjW63mvAVAqYIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "810589360345-5maeu5k3k6j52u7vbmm2kt91q6pnselp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
