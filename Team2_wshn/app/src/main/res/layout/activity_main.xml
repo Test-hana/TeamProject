@@ -23,7 +23,7 @@
     <FrameLayout
         android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -32,10 +32,35 @@
     </FrameLayout>
 
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:drawable/ic_menu_mylocation"
+        android:onClick="mCurrentLocation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- 검색창 레이아웃-->
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#FFFFFF"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,28 +72,48 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:layout_margin="5dp"
-            android:background="#6DFFFFFF"
-            android:hint="검색할 주소를 입력하시오."
-            android:textSize="20sp" />
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/btn_go"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
+            android:background="#CC79DA"
             android:text="Go"
-            android:textSize="17sp" />
-
-        <Button
-            android:id="@+id/btn_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="정보창"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            />
 
     </LinearLayout>
+
+
+    <fragment
+        android:id="@+id/autocomplete_fragment"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--
+       <Button
+           android:id="@+id/btn_info"
+           android:layout_width="70dp"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="50dp"
+           android:background="#8960D3"
+           android:text="info"
+           android:textSize="17sp"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent" />
+           -->
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

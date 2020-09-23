@@ -1,42 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:layout_gravity="bottom"
-    >
+    android:layout_height="120dp"
+    android:layout_gravity="bottom">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#6DFFFFFF"
-        >
+        android:background="#C4FFFFFF">
+
+
+        <TextView
+            android:id="@+id/Addr_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:text="상세주소"
+            android:textColor="#2E2D2D"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_upload"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Addr_name" />
 
         <TextView
             android:id="@+id/Addr_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="277dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:text="장소 이름"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btn_upload"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="8dp"
+            android:layout_height="40dp"
 
-            android:layout_marginBottom="7dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginBottom="5dp"
+
+            android:background="@drawable/round_tool"
             android:text="리뷰등록"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_view1"
             app:layout_constraintStart_toStartOf="parent" />
@@ -44,19 +61,22 @@
         <Button
             android:id="@+id/btn_view1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="10dp"
+            android:layout_height="40dp"
 
-            android:layout_marginBottom="7dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+
+            android:background="@drawable/round_tool"
             android:text="리뷰보기"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_upload" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </FrameLayout>

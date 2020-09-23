@@ -8,30 +8,86 @@
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btn_google"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="106dp"
-        android:layout_marginLeft="106dp"
-        android:layout_marginTop="360dp"
-        android:layout_marginEnd="106dp"
-        android:layout_marginRight="106dp"
-        android:layout_marginBottom="188dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="65dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_join" />
 
     <Button
         android:id="@+id/btn_guest"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="113dp"
-        android:text="Only Guest"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/btn_google"
-        app:layout_constraintStart_toStartOf="@+id/btn_google"
-        app:layout_constraintTop_toBottomOf="@+id/btn_google" />
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="25dp"
+        android:text="비회원"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_join"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+    <Button
+        android:id="@+id/btn_join"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="8dp"
+        android:text="회원가입"
+        app:layout_constraintEnd_toStartOf="@+id/btn_guest"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:orientation="vertical"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/tv_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:ems="10"
+            android:hint="이메일"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/tv_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:ems="10"
+            android:hint="비밀번호"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="로그인" />
+
+        <Button
+            android:id="@+id/btn_passwordReset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="비밀번호 재설정" />
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

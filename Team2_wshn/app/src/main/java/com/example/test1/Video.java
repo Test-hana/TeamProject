@@ -6,6 +6,11 @@ public class Video {   // DB에 있는 비디오 객
     private String Profile;
     private double LatLng;
     private int UploadDate;
+    /*
+    edit test1
+    edit test 2
+    test4
+     */
 
 
     public Video() {
