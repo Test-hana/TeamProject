@@ -3,7 +3,8 @@ package com.example.test1;
 import androidx.annotation.NonNull;
         import androidx.appcompat.app.AppCompatActivity;
         import androidx.core.app.ActivityCompat;
-        import androidx.fragment.app.FragmentTransaction;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 
         import android.Manifest;
         import android.content.Intent;
@@ -14,13 +15,17 @@ import androidx.annotation.NonNull;
         import android.net.Uri;
         import android.os.Bundle;
         import android.util.Log;
-        import android.view.View;
+import android.view.MotionEvent;
+import android.view.View;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.FrameLayout;
-        import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import com.google.android.gms.common.api.Status;
+import com.bumptech.glide.Glide;
+import com.google.android.gms.common.api.Status;
         import com.google.android.gms.location.FusedLocationProviderClient;
         import com.google.android.gms.location.LocationServices;
         import com.google.android.gms.maps.SupportMapFragment;
@@ -63,15 +68,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker marker; //마커 삭제를 위한 마커객체 생성
     private FrameLayout frame; //정보창 프레임
     private EditText inputAddr; //입력받은 주소값
-    private Button btn_go, btn_logout; //검색버튼
+    private Button btn_go, btn_logout, btn_guest_login; //검색버튼
 
     final Geocoder geocoder = new Geocoder(this); //입력받은 주소 값 위도경도 값으로 변환해주는 거
     private double longitude; //경도
     private double latitude; //위도
     private String str, str2;
 
+    private DrawerLayout drawerLayout; //네비게이션 바
+    private View drawerView;
+    private ImageView iv_profile;
+    private TextView tv_nickname, tv_email;
+
     private static final String TAG = "MainActivity";
 
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
 
 
-
+                /*
                 //구현중!!!!!!!!!!!! 구글로그인 사용자랑 자체회원가입 사용자 정보 불러오기
                 //DB에 위도경도 값 보내기
                 FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -170,10 +181,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 InfoDTO infoDTO = new InfoDTO();
 
+
                 infoDTO.place = str;
                 infoDTO.Lat = latitude;
                 infoDTO.Long = longitude;
 
+                //네비게이션 바 할때, 구글 user id, photourl 받음 - 조정 필요
                 //Intent intent = getIntent(); //GoogleLoginActivity로 부터 닉네임,프로필 사진url전달받음
                 //infoDTO.userId = intent.getStringExtra("nickname");
                 //infoDTO.profile = intent.getStringExtra("photourl");
@@ -185,12 +198,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if(user != null){
                     for (UserInfo profile : user.getProviderData()) {
                         infoDTO.userId = profile.getDisplayName();
-                        infoDTO.profile = profile.getPhotoUrl();
+                        //infoDTO.profile = profile.getPhotoUrl();
                     }
                 }
 
 
                 databaseReference.push().setValue(infoDTO);
+                */
+
 
 
 
@@ -241,8 +256,97 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        //네비게이션 메뉴바 - 이메일, 닉네임, 프로필 나타내기
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        drawerView = (View)findViewById(R.id.drawer);
+
+        drawerLayout.setDrawerListener(listener);
+        drawerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+
+        iv_profile = (ImageView)findViewById(R.id.iv_profile);
+        tv_email = (TextView) findViewById(R.id.tv_email);
+        tv_nickname = (TextView)findViewById(R.id.tv_nickname);
+        btn_guest_login = (Button)findViewById(R.id.btn_guest_login);//비회원일때만 보이는 로그인버튼
+
+
+        if (user != null) { //회원이라면..
+            for (UserInfo profile : user.getProviderData()) {
+
+                tv_email.setText(profile.getEmail()); //로그인한 이메일 불러오기
+
+                if(tv_nickname.length()==0){
+                    //MemberInfoActivity에서 닉네임이랑 프로필 정보 받아서 보여주기 구
+
+                    //안됨 왜안되는 지 모르겠음
+                    tv_nickname.setText("닉네임 설정하기");
+                    //iv_profile.setImageResource(R.mipmap.ic_launcher_round);
+
+
+                }else {
+                    //GoogleLoginActivity에서 구글 정보(id, photoUrl 불러오기)
+                    Intent intent = getIntent();
+                    String nickname = intent.getStringExtra("nickname");
+                    String photourl = intent.getStringExtra("photourl");
+
+                    tv_nickname.setText(nickname);//닉네임 text를 텍스트 뷰에 세팅
+                    Glide.with(this).load(photourl).into(iv_profile);//프로필 url를 이미지 뷰에 세팅
+                }
+
+
+            }
+        }
+        else {//비회원이라면..
+            iv_profile.setImageResource(R.mipmap.ic_launcher_round);
+            tv_nickname.setText("비회원");
+            tv_email.setText("로그인 하세요 >");
+            btn_logout.setVisibility(View.INVISIBLE); //로그아웃 버튼 안보이게
+            btn_guest_login.setVisibility(View.VISIBLE); //비회원 전용 로그인 버튼 보이게
+
+            btn_guest_login.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this , GoogleLoginActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
+
+
+
+
+
+
 
     }//oncreate 마지막
+
+
+    DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
+        @Override
+        public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+        }
+
+        @Override
+        public void onDrawerOpened(@NonNull View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerClosed(@NonNull View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+
+        }
+    };
 
     @Override
     public void onBackPressed() { //뒤로가기 버튼 클릭시, 앱 종료

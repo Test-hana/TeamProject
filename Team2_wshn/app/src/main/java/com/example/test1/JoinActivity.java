@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class JoinActivity extends AppCompatActivity {
 
-    private EditText tv_email, tv_password, tv_passwordCheck, tv_nickname;
+    private EditText tv_email, tv_password, tv_passwordCheck;
     private Button btn_join, btn_login;
     private FirebaseAuth mAuth; //FirebaseAuth 인스턴스 선언
 
@@ -34,9 +34,9 @@ public class JoinActivity extends AppCompatActivity {
         tv_email = (EditText)findViewById(R.id.tv_email);
         tv_password = (EditText)findViewById(R.id.tv_password);
         tv_passwordCheck = (EditText)findViewById(R.id.tv_passwordCheck);
-        //tv_nickname = (EditText)findViewById(R.id.tv_nickname); //아직 미사용, DB에 id 업로드할때, email에서 id 추출이 안되면 사용하기로 보류.
+
         btn_join = (Button)findViewById(R.id.btn_join);
-        btn_login = (Button)findViewById(R.id.btn_login);
+        btn_login = (Button)findViewById(R.id.btn_login); //이것도 굳이 필요는 없는데 로그인화면으로 넘어가는걸 위해서 보류
 
         btn_join.setOnClickListener(new View.OnClickListener() {
             @Override

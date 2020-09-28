@@ -44,19 +44,12 @@
             android:id="@+id/tv_passwordCheck"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="30dp"
             android:ems="10"
             android:hint="비밀번호 확인"
             android:inputType="textPassword" />
 
-        <EditText
-            android:id="@+id/tv_nickname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:ems="10"
-            android:hint="닉네임"
-            android:inputType="textPersonName" />
+
 
         <Button
             android:id="@+id/btn_join"

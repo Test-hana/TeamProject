@@ -150,19 +150,18 @@ public class GoogleLoginActivity extends AppCompatActivity implements GoogleApiC
                         if(task.isSuccessful()){//로그인이 성공했으면
                             startToast("로그인에 성공하였습니다.");
 
-                            //로그인성공 후 프로필이랑 닉네임 보여주는 거 필요없을 거 같아서 보류, 주석처리
-                            /*
-                            Intent intent = new Intent(getApplicationContext(), GoogleResultActivity.class); //GoogleResultActivity로 전달
+
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class); //MainActivity로 전달
                             intent.putExtra("nickname",account.getDisplayName());
                             intent.putExtra("photourl",String.valueOf(account.getPhotoUrl()));//String.valueof() 특정 자료형을 string형으로 변환할때
-                             */
 
+                            /*
                             Intent intent2 = new Intent(getApplicationContext(), MainActivity.class); //DB에 userid, profileUrl 저장하기위해 MainActivity로 닉네임 값 전달
                             intent2.putExtra("nickname",account.getDisplayName());
                             intent2.putExtra("photourl",String.valueOf(account.getPhotoUrl()));
-
-                            //startActivity(intent); //로그인성공 후 프로필이랑 닉네임 보여주는 거 필요없을 거 같아서 보류, 주석처리
-                            startActivity(intent2);
+                             */
+                            startActivity(intent);
+                            //startActivity(intent2);
 
                         }
                         else{//로그인이 실패했으면
@@ -195,9 +194,9 @@ public class GoogleLoginActivity extends AppCompatActivity implements GoogleApiC
                             if (task.isSuccessful()) {
                                 //성공 시
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                startToast("로그인에 성공하였습니다.");
+                                startToast("로그인에 성공하였습니다. 회원정보를 입력해주세요.");
 
-                                Intent intent = new Intent(GoogleLoginActivity.this,MainActivity.class);
+                                Intent intent = new Intent(GoogleLoginActivity.this,MemberInfoActivity.class);
                                 startActivity(intent);
                             } else {
                                 //실패 시
