@@ -117,8 +117,9 @@ public class GoogleLoginActivity extends AppCompatActivity implements GoogleApiC
             startActivity(intent);
             for (UserInfo profile : user.getProviderData()) {
                 String email = profile.getEmail();
-                Toast.makeText(GoogleLoginActivity.this, email+"로 로그인되었습니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(GoogleLoginActivity.this, email+"로 자동 로그인되었습니다.", Toast.LENGTH_SHORT).show();
             }
+            finish();
         }
 
 
@@ -150,18 +151,9 @@ public class GoogleLoginActivity extends AppCompatActivity implements GoogleApiC
                         if(task.isSuccessful()){//로그인이 성공했으면
                             startToast("로그인에 성공하였습니다.");
 
-
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class); //MainActivity로 전달
-                            intent.putExtra("nickname",account.getDisplayName());
-                            intent.putExtra("photourl",String.valueOf(account.getPhotoUrl()));//String.valueof() 특정 자료형을 string형으로 변환할때
-
-                            /*
-                            Intent intent2 = new Intent(getApplicationContext(), MainActivity.class); //DB에 userid, profileUrl 저장하기위해 MainActivity로 닉네임 값 전달
-                            intent2.putExtra("nickname",account.getDisplayName());
-                            intent2.putExtra("photourl",String.valueOf(account.getPhotoUrl()));
-                             */
-                            startActivity(intent);
-                            //startActivity(intent2);
+                            Intent intent2 = new Intent(GoogleLoginActivity.this, MainActivity.class);
+                            intent2.putExtra("닉네임", account.getDisplayName());
+                            startActivity(intent2);
 
                         }
                         else{//로그인이 실패했으면
@@ -194,10 +186,11 @@ public class GoogleLoginActivity extends AppCompatActivity implements GoogleApiC
                             if (task.isSuccessful()) {
                                 //성공 시
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                startToast("로그인에 성공하였습니다. 회원정보를 입력해주세요.");
+                                startToast("로그인에 성공하였습니다.");
 
-                                Intent intent = new Intent(GoogleLoginActivity.this,MemberInfoActivity.class);
+                                Intent intent = new Intent(GoogleLoginActivity.this, MainActivity.class);
                                 startActivity(intent);
+
                             } else {
                                 //실패 시
                                 if(task.getException()!=null){

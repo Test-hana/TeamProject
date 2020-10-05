@@ -9,7 +9,9 @@ import androidx.fragment.app.FragmentTransaction;
         import android.Manifest;
         import android.content.Intent;
         import android.content.pm.PackageManager;
-        import android.location.Address;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.location.Address;
         import android.location.Geocoder;
         import android.location.Location;
         import android.net.Uri;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.common.api.Status;
         import com.google.android.gms.location.FusedLocationProviderClient;
         import com.google.android.gms.location.LocationServices;
@@ -36,8 +39,10 @@ import com.google.android.gms.common.api.Status;
         import com.google.android.gms.maps.model.LatLng;
         import com.google.android.gms.maps.model.Marker;
         import com.google.android.gms.maps.model.MarkerOptions;
-        import com.google.android.gms.tasks.OnSuccessListener;
-        import com.google.android.libraries.places.api.Places;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
         import com.google.android.libraries.places.api.model.Place;
         import com.google.android.libraries.places.api.net.PlacesClient;
         import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
@@ -46,11 +51,19 @@ import com.google.android.gms.common.api.Status;
 
         import com.google.firebase.auth.FirebaseUser;
         import com.google.firebase.auth.UserInfo;
-        import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
         import com.google.firebase.database.FirebaseDatabase;
-        import com.google.firebase.database.annotations.NotNull;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.NotNull;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-        import java.io.IOException;
+import java.io.IOException;
         import java.text.SimpleDateFormat;
         import java.util.Arrays;
         import java.util.List;
@@ -70,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private EditText inputAddr; //입력받은 주소값
     private Button btn_go, btn_logout, btn_guest_login; //검색버튼
 
-    final Geocoder geocoder = new Geocoder(this); //입력받은 주소 값 위도경도 값으로 변환해주는 거
+
     private double longitude; //경도
     private double latitude; //위도
     private String str, str2;
@@ -81,13 +94,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private TextView tv_nickname, tv_email;
 
     private static final String TAG = "MainActivity";
+    private DatabaseReference mDatabase;
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         //지도구현
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -138,49 +151,52 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         btn_logout = (Button) findViewById(R.id.btn_logout);
         frame = (FrameLayout) findViewById(R.id.frame);
 
-
+        final Geocoder geocoder = new Geocoder(MainActivity.this); //입력받은 주소 값 위도경도 값으로 변환해주는 거
         btn_go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Address> list = null;
-                str = inputAddr.getText().toString();
 
-                try {
-                    list = geocoder.getFromLocationName(str, 10);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e("test", "입출력 오류");
-                }
+                if(inputAddr != null){
+                    List<Address> list = null;
+                    str = inputAddr.getText().toString();
 
-                marker.remove(); //이전의 마커 삭제
-                if (list != null) {
-                    if (list.size() == 0) {
-                        //입력한 주소의 위도경도 값이 없다면
-                        Toast.makeText(MainActivity.this, "해당되는 주소 정보는 없습니다", Toast.LENGTH_SHORT).show();
-
-                    } else {
-
-                        Address address = list.get(0);
-                        longitude = address.getLongitude(); //경도
-                        latitude = address.getLatitude(); //위도
-                        LatLng latLng = new LatLng(latitude, longitude);
-                        str2 = address.getAddressLine(0) + "\n"; //상세주소
-
-                        marker = mMap.addMarker(new MarkerOptions().position(latLng));
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-
+                    try {
+                        list = geocoder.getFromLocationName(str, 10);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.e("test", "입출력 오류");
                     }
-                }
+
+                    marker.remove(); //이전의 마커 삭제
+                    if (list != null) {
+                        if (list.size() == 0) {
+                            //입력한 주소의 위도경도 값이 없다면
+                            Toast.makeText(MainActivity.this, "해당되는 주소 정보는 없습니다", Toast.LENGTH_SHORT).show();
+
+                        } else {
+
+                            Address address = list.get(0);
+                            longitude = address.getLongitude(); //경도
+                            latitude = address.getLatitude(); //위도
+                            LatLng latLng = new LatLng(latitude, longitude);
+                            str2 = address.getAddressLine(0) + "\n"; //상세주소
+
+                            marker = mMap.addMarker(new MarkerOptions().position(latLng));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+
+                        }
+                    }
+
+
 
 
                 /*
-                //구현중!!!!!!!!!!!! 구글로그인 사용자랑 자체회원가입 사용자 정보 불러오기
+                //구현중!!!!!!!!!!!! 구글로그인 사용자랑 자체회원가입 사용자 정보 불러오기 - 튕김
                 //DB에 위도경도 값 보내기
                 FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                 DatabaseReference databaseReference = firebaseDatabase.getReference("DB");
 
                 InfoDTO infoDTO = new InfoDTO();
-
 
                 infoDTO.place = str;
                 infoDTO.Lat = latitude;
@@ -189,31 +205,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //네비게이션 바 할때, 구글 user id, photourl 받음 - 조정 필요
                 //Intent intent = getIntent(); //GoogleLoginActivity로 부터 닉네임,프로필 사진url전달받음
                 //infoDTO.userId = intent.getStringExtra("nickname");
-                //infoDTO.profile = intent.getStringExtra("photourl");
-
+                //infoDTO.userId = tv_nickname.toString();
                 SimpleDateFormat format = new SimpleDateFormat("MM월dd일HH시mm분");
                 infoDTO.uploadTime = format.format(System.currentTimeMillis());
 
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if(user != null){
-                    for (UserInfo profile : user.getProviderData()) {
-                        infoDTO.userId = profile.getDisplayName();
-                        //infoDTO.profile = profile.getPhotoUrl();
-                    }
-                }
-
 
                 databaseReference.push().setValue(infoDTO);
-                */
 
 
+                 */
 
-
-
-
+                }else {
+                    Toast.makeText(MainActivity.this, "주소를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
+
+
+
 
 
         /* 보류
@@ -271,34 +281,27 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         iv_profile = (ImageView)findViewById(R.id.iv_profile);
         tv_email = (TextView) findViewById(R.id.tv_email);
         tv_nickname = (TextView)findViewById(R.id.tv_nickname);
+
         btn_guest_login = (Button)findViewById(R.id.btn_guest_login);//비회원일때만 보이는 로그인버튼
 
-
         if (user != null) { //회원이라면..
-            for (UserInfo profile : user.getProviderData()) {
+            tv_email.setText(user.getEmail()); //로그인한 이메일 불러오기
 
-                tv_email.setText(profile.getEmail()); //로그인한 이메일 불러오기
+            //자체 회원가입 사용자 정보 나타내기
+            Intent intent = getIntent(); //MemberInfoActivity에서 닉네임이랑 프로필 정보 받아서 보여주기
+            tv_nickname.setText(intent.getStringExtra("닉네임"));
 
-                if(tv_nickname.length()==0){
-                    //MemberInfoActivity에서 닉네임이랑 프로필 정보 받아서 보여주기 구
+            if(tv_nickname.length() > 0){ //구글 사용자와 자체회원 나누기!!!!!!!!!!!!!!!!1
 
-                    //안됨 왜안되는 지 모르겠음
-                    tv_nickname.setText("닉네임 설정하기");
-                    //iv_profile.setImageResource(R.mipmap.ic_launcher_round);
+                Glide.with(this).load(intent.getStringExtra("프로필uri")).centerCrop().override(500).into(iv_profile); //프로필 url를 이미지 뷰에 세팅
 
-
-                }else {
-                    //GoogleLoginActivity에서 구글 정보(id, photoUrl 불러오기)
-                    Intent intent = getIntent();
-                    String nickname = intent.getStringExtra("nickname");
-                    String photourl = intent.getStringExtra("photourl");
-
-                    tv_nickname.setText(nickname);//닉네임 text를 텍스트 뷰에 세팅
-                    Glide.with(this).load(photourl).into(iv_profile);//프로필 url를 이미지 뷰에 세팅
-                }
-
+                //GoogleLoginActivity에서 구글 정보(id, photoUrl 불러오기)
+                Intent intent2 = getIntent();
+                tv_nickname.setText(intent2.getStringExtra("닉네임"));//닉네임 text를 텍스트 뷰에 세팅
+                Glide.with(this).load(user.getPhotoUrl()).centerCrop().override(500).into(iv_profile);//프로필 url를 이미지 뷰에 세팅
 
             }
+
         }
         else {//비회원이라면..
             iv_profile.setImageResource(R.mipmap.ic_launcher_round);
@@ -306,6 +309,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             tv_email.setText("로그인 하세요 >");
             btn_logout.setVisibility(View.INVISIBLE); //로그아웃 버튼 안보이게
             btn_guest_login.setVisibility(View.VISIBLE); //비회원 전용 로그인 버튼 보이게
+
 
             btn_guest_login.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -448,8 +452,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
-                        marker.remove();
                         if (location != null) {
+                            marker.remove();
                             //현재위치
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
@@ -459,22 +463,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 13));
 
-                            List<Address> list = null;
-                            try {
-                                list = geocoder.getFromLocation(latitude, longitude, 10);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                Log.e("test", "역지오코딩 에러발생");
-                            }
+                            TryCatch();
 
-                            if (list != null) {
-                                if (list.size() == 0) {
-                                    Toast.makeText(MainActivity.this, "해당되는 주소 정보는 없습니다", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    str = marker.getTitle();
-                                    str2 = list.get(0).getAddressLine(0) + "\n";
-                                }
-                            }
                         }
                     }
                 });
@@ -500,6 +490,27 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+
+    private void TryCatch(){
+
+        final Geocoder geocoder = new Geocoder(MainActivity.this); //입력받은 주소 값 위도경도 값으로 변환해주는 거
+        List<Address> list = null;
+        try {
+            list = geocoder.getFromLocation(latitude, longitude, 10);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("test", "역지오코딩 에러발생");
+        }
+
+        if (list != null) {
+            if (list.size() == 0) {
+                Toast.makeText(MainActivity.this, "해당되는 주소 정보는 없습니다", Toast.LENGTH_SHORT).show();
+            } else {
+                str = marker.getTitle();
+                str2 = list.get(0).getAddressLine(0) + "\n";
+            }
+        }
+    }
 
 }
 

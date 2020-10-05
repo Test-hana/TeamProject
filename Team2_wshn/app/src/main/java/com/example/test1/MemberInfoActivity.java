@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,6 +30,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -37,13 +44,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 public class MemberInfoActivity extends AppCompatActivity {
 
-    private ImageView iv_profile;
+    private static final String TAG = "MemberInfoActivity";
+    public ImageView iv_profile;
     private Button btn_ok, picture, gallery;
-    private EditText tv_nickname;
+    public EditText tv_nickname;
     private String profilePath;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,8 +145,7 @@ public class MemberInfoActivity extends AppCompatActivity {
             case 0:{
                 if(resultCode == Activity.RESULT_OK){
                     profilePath = data.getStringExtra("profilePath");
-                    Bitmap bmp = BitmapFactory.decodeFile(profilePath);
-                    iv_profile.setImageBitmap(bmp);
+                    Glide.with(this).load(profilePath).centerCrop().override(500).into(iv_profile);
                     Log.e("로그", "profilePath:"+profilePath);
 
 
@@ -146,14 +155,13 @@ public class MemberInfoActivity extends AppCompatActivity {
     }
 
     private void InfoSetting(){
-        String nickname = tv_nickname.getText().toString();
+        final String nickname = tv_nickname.getText().toString();
 
         //프로필 설정하기
         if(nickname.length()>0){
-
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             final StorageReference mountainImagesRef = storageRef.child("users/"+user.getUid()+"/profileImage.jpg");
 
             if(profilePath == null){
@@ -162,14 +170,12 @@ public class MemberInfoActivity extends AppCompatActivity {
                 try {
                     InputStream stream = new FileInputStream(new File(profilePath));
                     UploadTask uploadTask = mountainImagesRef.putStream(stream);
-
                     uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
                         public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                             if (!task.isSuccessful()) {
                                 Log.e("실패1","실패");
                                 throw task.getException();
-
                             }
                             // Continue with the task to get the download URL
                             return mountainImagesRef.getDownloadUrl();
@@ -178,16 +184,38 @@ public class MemberInfoActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
-                                Uri downloadUri = task.getResult();
+                                final Uri downloadUri = task.getResult();
                                 Log.e("성공","성공 : "+downloadUri);
 
-                                startToast("회원정보가 설정되었습니다.");
-                                Intent intent = new Intent(MemberInfoActivity.this, MainActivity.class);
-                                startActivity(intent);
+                                mDatabase = FirebaseDatabase.getInstance().getReference("Users");
+                                final InfoDTO infoDTO = new InfoDTO(nickname,downloadUri.toString());
+
+                                mDatabase.push().setValue(infoDTO)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                startToast("회원정보 등록을 성공하였습니다.");
+                                                Log.d(TAG, "DocumentSnapshot successfully written!");
+
+                                                Intent intent = new Intent(MemberInfoActivity.this, MainActivity.class);
+                                                Bundle bundle = new Bundle(); //번들 객체 생성
+
+                                                bundle.putString("닉네임", nickname);
+                                                bundle.putString("프로필uri", downloadUri.toString());
+                                                intent.putExtras(bundle);
+                                                startActivity(intent);
+
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                startToast("회원정보 등록을 실패하였습니다.");
+                                                Log.w(TAG, "Error writing document", e);
+                                            }
+                                        });
 
                             } else {
-                                // Handle failures
-                                // ...
                                 Log.e("로그","실패");
                             }
                         }
@@ -201,8 +229,14 @@ public class MemberInfoActivity extends AppCompatActivity {
             startToast("회원정보를 설정해주세요.");
         }
     }
+
+
     private void startToast(String msg){ //리스너에서 Toast msg가 불가해서
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
+
+
+
+
 
 }

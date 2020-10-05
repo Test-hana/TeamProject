@@ -79,9 +79,9 @@ public class JoinActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     //성공 시
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    Intent intent = new Intent(JoinActivity.this,MainActivity.class);
+                                    startToast("로그인에 성공하였습니다. 회원정보를 입력해주세요.");
+                                    Intent intent = new Intent(JoinActivity.this,MemberInfoActivity.class);
                                     startActivity(intent);
-                                    startToast("회원가입에 성공하였습니다.");
 
                                 } else {
                                     //실패 시
