@@ -4,13 +4,15 @@ apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
-
     defaultConfig {
         applicationId "com.example.test1"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -25,14 +27,27 @@ android {
 }
 
 dependencies {
+    def supportVersion = "28.0.0"
+    def glideVersion = "4.9.0"
+    def exoPlayerVersion = "2.8.4"  // 2.9.0 has min sdk 26
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+
+    compile 'com.android.support:multidex:1.0.3'
 
     //구글로그인을 위한
     implementation 'com.google.firebase:firebase-analytics:17.5.0'//파이어베이스 앱 분석
     implementation 'com.google.firebase:firebase-core:17.5.0'//파이어베이스 코어
+
     implementation 'com.google.firebase:firebase-auth:19.4.0'//파이어베이스 인증
     implementation 'com.firebaseui:firebase-ui-auth:4.2.1'//파이어베이스 인증2
     implementation 'com.github.bumptech.glide:glide:4.11.0'//글라이드 구글 프로필 이미지 로딩
+
+    implementation 'com.google.firebase:firebase-auth:19.3.2'//파이어베이스 인증
+    implementation 'com.firebaseui:firebase-ui-auth:6.1.0'//파이어베이스 인증2
+    implementation 'com.github.bumptech.glide:glide:4.10.0'//글라이드 구글 프로필 이미지 로딩
+
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'//글라이드 구글 프로필 이미지 로딩2
 
     implementation 'com.google.firebase:firebase-database:19.4.0' //파이어베이스 데이터베이스
@@ -51,7 +66,19 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
+
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.google.firebase:firebase-firestore:21.7.0'
+
+    // Recyclerview
+    implementation "com.android.support:recyclerview-v7:$supportVersion"
+
+    // ExoPlayer
+    implementation "com.google.android.exoplayer:exoplayer:$exoPlayerVersion"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+
 }

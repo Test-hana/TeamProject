@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 public class Info_Fragment extends Fragment {
 
     private TextView Addr_name,Addr_detail;
@@ -84,7 +86,7 @@ public class Info_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //최근 영상 자동 재생을 위한 PlayActivity로 이동
-                getActivity().startActivity(new Intent(getActivity(), PlayActivity.class));
+                Objects.requireNonNull(getActivity()).startActivity(new Intent(getActivity(), PlayActivity.class));
             }
         });
 
