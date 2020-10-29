@@ -9,15 +9,19 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+
+import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -44,21 +48,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Arrays;
 
 public class MemberInfoActivity extends AppCompatActivity {
 
     private static final String TAG = "MemberInfoActivity";
     public ImageView iv_profile;
     private Button btn_ok, picture, gallery;
+
     public EditText tv_nickname;
     private String profilePath;
     private DatabaseReference mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_info);
+
 
         tv_nickname = (EditText) findViewById(R.id.tv_nickname);
 
@@ -75,14 +81,7 @@ public class MemberInfoActivity extends AppCompatActivity {
             }
         });
 
-        btn_ok = findViewById(R.id.btn_ok);
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InfoSetting();
 
-            }
-        });
 
         picture = findViewById(R.id.picture);
         picture.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +118,21 @@ public class MemberInfoActivity extends AppCompatActivity {
 
             }
         });
+
+
+        btn_ok = findViewById(R.id.btn_ok);
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InfoSetting();
+
+            }
+        });
+
+
+
+
+
 
     }//onCreate 끝
 
@@ -164,6 +178,7 @@ public class MemberInfoActivity extends AppCompatActivity {
             final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             final StorageReference mountainImagesRef = storageRef.child("users/"+user.getUid()+"/profileImage.jpg");
 
+
             if(profilePath == null){
                 startToast("프로필을 설정해주세요.");
             } else {
@@ -188,9 +203,9 @@ public class MemberInfoActivity extends AppCompatActivity {
                                 Log.e("성공","성공 : "+downloadUri);
 
                                 mDatabase = FirebaseDatabase.getInstance().getReference("Users");
-                                final InfoDTO infoDTO = new InfoDTO(nickname,downloadUri.toString());
+                                final UserInfo userInfo = new UserInfo(nickname,downloadUri.toString());
 
-                                mDatabase.push().setValue(infoDTO)
+                                mDatabase.child(user.getUid()).setValue(userInfo)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
@@ -200,10 +215,11 @@ public class MemberInfoActivity extends AppCompatActivity {
                                                 Intent intent = new Intent(MemberInfoActivity.this, MainActivity.class);
                                                 Bundle bundle = new Bundle(); //번들 객체 생성
 
-                                                bundle.putString("닉네임", nickname);
-                                                bundle.putString("프로필uri", downloadUri.toString());
+                                                bundle.putString("자체닉네임", nickname);
+                                                bundle.putString("자체프로필uri", downloadUri.toString());
                                                 intent.putExtras(bundle);
                                                 startActivity(intent);
+
 
                                             }
                                         })

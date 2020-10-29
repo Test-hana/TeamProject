@@ -36,15 +36,23 @@
             android:id="@+id/picture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="촬영"
-            android:layout_weight="1"/>
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/round_tool"
+            android:text="촬영" />
 
         <Button
             android:id="@+id/change"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="화면 전환"
-            android:layout_weight="1"/>
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/round_tool"
+            android:text="화면 전환" />
 
 
     </LinearLayout>

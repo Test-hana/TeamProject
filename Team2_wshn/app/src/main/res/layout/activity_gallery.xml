@@ -4,7 +4,8 @@
     android:id="@+id/gallery_RecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GalleryActivity">
+    tools:context=".GalleryActivity"
+    android:background="@drawable/main_background">
 
 
 </androidx.recyclerview.widget.RecyclerView>

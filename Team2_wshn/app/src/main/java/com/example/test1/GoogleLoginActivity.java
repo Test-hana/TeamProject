@@ -6,13 +6,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -38,6 +46,7 @@ public class GoogleLoginActivity extends AppCompatActivity implements GoogleApiC
 
     private Button btn_guest,btn_join,btn_login,btn_passwordReset;
     private EditText tv_email, tv_password;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +83,7 @@ public class GoogleLoginActivity extends AppCompatActivity implements GoogleApiC
         btn_guest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(GoogleLoginActivity.this,MainActivity.class);
                 startActivity(intent);
                 startToast("비회원입니다.");
@@ -96,6 +106,7 @@ public class GoogleLoginActivity extends AppCompatActivity implements GoogleApiC
             @Override
             public void onClick(View v) {
                 Login();
+
             }
         });
 
@@ -109,22 +120,22 @@ public class GoogleLoginActivity extends AppCompatActivity implements GoogleApiC
             }
         });
 
+        SharedPreferences shp = getSharedPreferences("AutoLoginInfo", MODE_PRIVATE);
+        Boolean shpvalue = shp.getBoolean("shp체크값", false);
 
-        //로그인된 사용자가 null이 아니라면 바로 메인으로 이동(자동로그인)
+        //로그인된 사용자가 null이 아니고 로그인상태 유지 체크가 되어있다면 바로 메인으로 이동(자동로그인)
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
+        if (user != null && shpvalue) {
+
             Intent intent = new Intent(GoogleLoginActivity.this,MainActivity.class);
             startActivity(intent);
+
             for (UserInfo profile : user.getProviderData()) {
                 String email = profile.getEmail();
                 Toast.makeText(GoogleLoginActivity.this, email+"로 자동 로그인되었습니다.", Toast.LENGTH_SHORT).show();
             }
-            finish();
+
         }
-
-
-
-
 
     }//onCreate 마지막
 
@@ -152,7 +163,7 @@ public class GoogleLoginActivity extends AppCompatActivity implements GoogleApiC
                             startToast("로그인에 성공하였습니다.");
 
                             Intent intent2 = new Intent(GoogleLoginActivity.this, MainActivity.class);
-                            intent2.putExtra("닉네임", account.getDisplayName());
+                            intent2.putExtra("구글닉네임", account.getDisplayName());
                             startActivity(intent2);
 
                         }
@@ -185,9 +196,8 @@ public class GoogleLoginActivity extends AppCompatActivity implements GoogleApiC
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 //성공 시
-                                FirebaseUser user = mAuth.getCurrentUser();
+                                //FirebaseUser user = mAuth.getCurrentUser();
                                 startToast("로그인에 성공하였습니다.");
-
                                 Intent intent = new Intent(GoogleLoginActivity.this, MainActivity.class);
                                 startActivity(intent);
 

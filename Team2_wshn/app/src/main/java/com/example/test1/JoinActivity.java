@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class JoinActivity extends AppCompatActivity {
 
     private EditText tv_email, tv_password, tv_passwordCheck;
-    private Button btn_join, btn_login;
+    private Button btn_join;
     private FirebaseAuth mAuth; //FirebaseAuth 인스턴스 선언
 
     @Override
@@ -36,8 +36,6 @@ public class JoinActivity extends AppCompatActivity {
         tv_passwordCheck = (EditText)findViewById(R.id.tv_passwordCheck);
 
         btn_join = (Button)findViewById(R.id.btn_join);
-        btn_login = (Button)findViewById(R.id.btn_login); //이것도 굳이 필요는 없는데 로그인화면으로 넘어가는걸 위해서 보류
-
         btn_join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,16 +43,6 @@ public class JoinActivity extends AppCompatActivity {
             }
 
         });
-
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(JoinActivity.this,GoogleLoginActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
 
 
 
@@ -66,8 +54,8 @@ public class JoinActivity extends AppCompatActivity {
     }
 
     private void Join(){ //회원가입 함수
-        String email = tv_email.getText().toString();
-        String password = tv_password.getText().toString();
+        final String email = tv_email.getText().toString();
+        final String password = tv_password.getText().toString();
         String passwordCheck = tv_passwordCheck.getText().toString();
 
         if(email.length() > 0 && password.length() > 0 && passwordCheck.length() > 0){
@@ -81,7 +69,14 @@ public class JoinActivity extends AppCompatActivity {
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     startToast("로그인에 성공하였습니다. 회원정보를 입력해주세요.");
                                     Intent intent = new Intent(JoinActivity.this,MemberInfoActivity.class);
+                                   /*//자동로그인을 위해서 MemberInfo액티비티로 전달
+                                    Bundle bundle = new Bundle(); //번들 객체 생성
+                                    bundle.putString("이메일", email);
+                                    bundle.putString("비밀번호", password);
+                                    intent.putExtras(bundle);
+                                    */
                                     startActivity(intent);
+
 
                                 } else {
                                     //실패 시

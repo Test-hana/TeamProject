@@ -3,14 +3,12 @@
     package="com.example.test1">
     <!-- 카메라 녹화를 위한 권한 -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!--갤러리 읽기-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 갤러리 읽기 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-    <!-- 지도 검색을 위한 권한 -->
+    <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 지도 검색을 위한 권한 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,31 +20,39 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".GalleryActivity"></activity>
-        <activity android:name=".MemberInfoActivity"/>
-
-        <activity android:name=".PasswordResetActivity" /> <!-- 구글맵 API 설정 -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAj9rimfetg7Vuse5vaTa9SDhpMli-VNkM" />
-
+        <activity android:name=".KakaoTestActivity"/>
+        <activity android:name=".GalleryActivity" />
+        <activity android:name=".MemberInfoActivity" />
+        <activity android:name=".PasswordResetActivity" />
         <activity android:name=".GoogleResultActivity" />
-        <activity android:name=".GoogleLoginActivity">
+        <activity android:name=".PlayActivity" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <data
+                    android:host="@string/kakaolink_host"
+                    android:scheme="@string/kakao_scheme" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".PlayActivity" />
         <activity android:name=".UploadActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".JoinActivity" />
         <activity android:name=".CameraActivity" />
+        <activity android:name=".GoogleLoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-
-
-</application>
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" /> <!-- 구글맵 API 설정 -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAj9rimfetg7Vuse5vaTa9SDhpMli-VNkM" />
+    </application>
 
 </manifest>

@@ -49,6 +49,8 @@ public class UploadActivity extends AppCompatActivity implements SurfaceHolder.C
                     mediaRecorder.release();
                     camera.lock();
                     recording = false;
+
+
                 }
                 else{
                     runOnUiThread(new Runnable() {//백그라운드에서 돌아가는

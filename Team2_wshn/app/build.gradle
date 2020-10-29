@@ -34,7 +34,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$supportVersion"
 
-    compile 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:multidex:1.0.3'
 
     //구글로그인을 위한
     implementation 'com.google.firebase:firebase-analytics:17.5.0'//파이어베이스 앱 분석
@@ -58,6 +58,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.1.0'//구글 맵 사용을 위한
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     implementation 'com.google.android.libraries.places:places:2.4.0' //구글(place api) 검색기능을 위해
+    implementation 'com.google.maps.android:android-maps-utils:2.0.3' //clustering
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
@@ -70,6 +71,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.google.firebase:firebase-firestore:21.7.0'
+
+    implementation group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION //for Kakao sdk
+
 
     // Recyclerview
     implementation "com.android.support:recyclerview-v7:$supportVersion"

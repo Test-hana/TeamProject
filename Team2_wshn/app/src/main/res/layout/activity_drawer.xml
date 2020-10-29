@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="240dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
@@ -36,6 +37,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:textSize="16sp"
+        android:text="이메일"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_nickname" />
 
@@ -48,8 +50,33 @@
         android:layout_marginTop="10dp"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:text="닉네임"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+    <CheckBox
+        android:id="@+id/cb_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="로그인 상태 유지"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_email"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="186dp"
+        android:layout_marginEnd="84dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_save"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/btn_logout"
@@ -60,7 +87,8 @@
         android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        android:background="@drawable/round_tool"/>
 
     <Button
         android:id="@+id/btn_guest_login"
@@ -71,8 +99,8 @@
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="invisible"
-        />
+        android:background="@drawable/round_tool"
+        android:visibility="invisible" />
 
 
 
