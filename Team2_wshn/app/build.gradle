@@ -17,6 +17,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,29 +34,27 @@ android {
 dependencies {
     def supportVersion = "28.0.0"
     def glideVersion = "4.9.0"
-    def exoPlayerVersion = "2.8.4"  // 2.9.0 has min sdk 26
-
+    def exoPlayerVersion = "2.10.8"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$supportVersion"
-
     implementation 'com.android.support:multidex:1.0.3'
 
     //구글로그인을 위한
-    implementation 'com.google.firebase:firebase-analytics:17.5.0'//파이어베이스 앱 분석
-    implementation 'com.google.firebase:firebase-core:17.5.0'//파이어베이스 코어
-
-    implementation 'com.google.firebase:firebase-auth:19.4.0'//파이어베이스 인증
-    implementation 'com.firebaseui:firebase-ui-auth:4.2.1'//파이어베이스 인증2
-    implementation 'com.github.bumptech.glide:glide:4.11.0'//글라이드 구글 프로필 이미지 로딩
-
-    implementation 'com.google.firebase:firebase-auth:19.3.2'//파이어베이스 인증
+    implementation 'com.google.firebase:firebase-analytics:18.0.0'//파이어베이스 앱 분석
+    implementation 'com.google.firebase:firebase-core:18.0.0'//파이어베이스 코어
+    implementation 'com.google.firebase:firebase-auth:20.0.0'//파이어베이스 인증
     implementation 'com.firebaseui:firebase-ui-auth:6.1.0'//파이어베이스 인증2
-    implementation 'com.github.bumptech.glide:glide:4.10.0'//글라이드 구글 프로필 이미지 로딩
-
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'//글라이드 구글 프로필 이미지 로딩2
-
-    implementation 'com.google.firebase:firebase-database:19.4.0' //파이어베이스 데이터베이스
+    // DB
+    implementation 'com.google.firebase:firebase-database:19.5.1' //파이어베이스 데이터베이스
+    implementation 'com.firebaseui:firebase-ui-database:6.2.0' // 그래들 시 필요
+    // Storage
     implementation 'com.google.firebase:firebase-storage:19.2.0'//파이어베이스 스토리지 영상재생을 위한
+    // Firestore
+    implementation 'com.google.firebase:firebase-firestore:22.0.0'
+    implementation 'com.firebaseui:firebase-ui-firestore:4.3.2'
+
+    implementation 'com.github.bumptech.glide:glide:4.11.0'//글라이드 구글 프로필 이미지 로딩
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'//글라이드 구글 프로필 이미지 로딩2
     implementation 'gun0912.ted:tedpermission:2.0.0'//카메라 녹화를 위한 추가
 
     implementation 'com.google.android.gms:play-services-maps:17.0.0'//구글 맵 사용을 위한
@@ -59,30 +62,29 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     implementation 'com.google.android.libraries.places:places:2.4.0' //구글(place api) 검색기능을 위해
     implementation 'com.google.maps.android:android-maps-utils:2.0.3' //clustering
+    implementation 'com.google.android.gms:play-services-basement:17.5.0'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
 
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-    implementation 'com.google.firebase:firebase-firestore:21.7.0'
 
     implementation group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION //for Kakao sdk
 
 
     // Recyclerview
-    implementation "com.android.support:recyclerview-v7:$supportVersion"
+   // implementation "com.android.support:recyclerview-v7:$supportVersion"
 
     // ExoPlayer
     implementation "com.google.android.exoplayer:exoplayer:$exoPlayerVersion"
-
-    // Glide
-    implementation "com.github.bumptech.glide:glide:$glideVersion"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoPlayerVersion"
+    implementation "com.google.android.exoplayer:exoplayer-dash:$exoPlayerVersion"
+    implementation "com.google.android.exoplayer:exoplayer-ui:$exoPlayerVersion"
+    implementation 'com.google.android.exoplayer:exoplayer-hls:2.10.8'
+    implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.10.8'
 
 }

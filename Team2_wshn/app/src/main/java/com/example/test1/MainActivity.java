@@ -44,6 +44,7 @@ import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.example.test1.PlayUpload.PlayActivity;
 import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Status;
@@ -262,7 +263,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Log.e("test", "입출력 오류");
                     }
 
-                    marker.remove(); //이전의 마커 삭제
+                    if(marker!=null){
+                        marker.remove(); //이전의 마커 삭제
+                    }
+
                     if (list != null) {
                         if (list.size() == 0) {
                             //입력한 주소의 위도경도 값이 없다면
@@ -552,8 +556,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng Seoul = new LatLng(37.551036, 126.990899); //처음 지도 켰을때 위치
         final MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(Seoul).title("서울 남산공원").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-        marker = mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Seoul, 10));
+        marker = mMap.addMarker(markerOptions);
 
         str = marker.getTitle();
         str2 = "서울특별시 중구 용산2가동 삼일대로 231";
@@ -597,9 +601,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onMapClick(LatLng point) {
-                marker.remove();
+                if(marker!=null){
+                    marker.remove();
+                }
                 latitude = point.latitude;
                 longitude = point.longitude;
+                MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(new LatLng(latitude,longitude));
                 markerOptions.title("핀 고정함").toString();
 
@@ -660,6 +667,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     bundle.putString("장소이름",myitem.getTitle());
                     bundle.putString("장소주소", myitem.getSnippet());
                     bundle.putParcelable("장소사진",myitem.getBitmap());
+                    bundle.putDouble("Long",longitude);
+                    bundle.putDouble("Lat", latitude);
+                    bundle.putString("UserId", user.getEmail());
                     info_fragment.setArguments(bundle);//정보창 fragment로 전달
 
 

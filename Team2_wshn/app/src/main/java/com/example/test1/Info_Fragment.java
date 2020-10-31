@@ -16,6 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.test1.PlayUpload.PlayActivity;
+import com.example.test1.PlayUpload.PlayUploadActivity;
+import com.example.test1.PlayUpload.VideoMember;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
@@ -28,8 +31,6 @@ public class Info_Fragment extends Fragment {
     private Bitmap placeBitmap;
     private ImageView iv_PlacePhoto;
     public Info_Fragment(){
-
-
     }
 
     @Nullable
@@ -84,7 +85,11 @@ public class Info_Fragment extends Fragment {
                     ad.show();
 
                 }else{
-                    getActivity().startActivity(new Intent(getActivity(), UploadActivity.class));
+                    VideoMember videoMember = new VideoMember();
+                    Intent intent = new Intent(getActivity(), PlayUploadActivity.class);
+                    bundle.putSerializable("videoMember", videoMember);
+                    intent.putExtras(bundle);
+                    Objects.requireNonNull(getActivity()).startActivity(intent);
                 }
 
             }
@@ -94,7 +99,11 @@ public class Info_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //최근 영상 자동 재생을 위한 PlayActivity로 이동
-                Objects.requireNonNull(getActivity()).startActivity(new Intent(getActivity(), PlayActivity.class));
+                VideoMember videoMember = new VideoMember();
+                Intent intent = new Intent(getActivity(), PlayActivity.class);
+                bundle.putSerializable("videoMember", videoMember);
+                intent.putExtras(bundle);
+                Objects.requireNonNull(getActivity()).startActivity(intent);
             }
         });
 

@@ -20,12 +20,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".KakaoTestActivity"/>
+
+        <activity android:name=".PlayUpload.PlayUploadActivity" />
         <activity android:name=".GalleryActivity" />
         <activity android:name=".MemberInfoActivity" />
         <activity android:name=".PasswordResetActivity" />
-        <activity android:name=".GoogleResultActivity" />
-        <activity android:name=".PlayActivity" >
+        <activity android:name=".PlayUpload.PlayActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -36,7 +36,6 @@
                     android:scheme="@string/kakao_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".UploadActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".JoinActivity" />
         <activity android:name=".CameraActivity" />

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    tools:context=".PlayUpload.PlayUploadActivity">
+
+
+    <VideoView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/videoView_main"
+        android:backgroundTint="@android:color/black"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Video name"
+        android:textSize="20sp"
+        android:id="@+id/et_video_name"
+        android:layout_margin="10dp"
+        android:backgroundTint="@android:color/black"
+        android:autoText="true"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_chooseVideo"
+        android:text="choose video"
+        android:layout_margin="20dp"
+        android:background="@drawable/round_tool"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_upload_main"
+        android:text="upload"
+        android:layout_margin="20dp"
+        android:background="@drawable/round_tool"
+
+        />
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:indeterminate="true"
+        android:indeterminateTint="@android:color/holo_orange_dark"
+        android:visibility="invisible"
+        android:id="@+id/progressBar_main"
+        />
+
+
+
+</LinearLayout>
+
+
+
