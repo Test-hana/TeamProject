@@ -45,10 +45,13 @@ public class PlayActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         bundle = intent.getExtras();
-        videoMember.setLong(bundle.getDouble("Long",0));
-        videoMember.setLat(bundle.getDouble("Lat",0));
-        videoMember.setUserId(bundle.getString("UserId"));
-        Toast.makeText(this, videoMember.getUserId() +"\n" + videoMember.getLong() +"\n" + videoMember.getLat(), Toast.LENGTH_SHORT).show();
+        if(bundle!=null){
+            videoMember.setLong(bundle.getDouble("Long",0));
+            videoMember.setLat(bundle.getDouble("Lat",0));
+            videoMember.setUserId(bundle.getString("UserId"));
+            Toast.makeText(this, videoMember.getUserId() +"\n" + videoMember.getLong() +"\n" + videoMember.getLat(), Toast.LENGTH_SHORT).show();
+
+        }
 
 
     }

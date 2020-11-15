@@ -81,7 +81,9 @@ public class PlayUploadActivity extends AppCompatActivity {
         videoMember.setLong(bundle.getDouble("Long",0));
         videoMember.setLat(bundle.getDouble("Lat",0));
         videoMember.setUserId(bundle.getString("UserId"));
-        Toast.makeText(this,"Long : " + videoMember.getLong() + " Lat : " + videoMember.getLat(), Toast.LENGTH_LONG).show();
+        videoMember.setPlaceName(bundle.getString("장소이름"));
+        //videoMember.setBitmap(bundle.getParcelable("장소사진"));
+        Toast.makeText(this,"Long : " + videoMember.getLong() + " Lat : " + videoMember.getLat() + videoMember.getPlaceName(), Toast.LENGTH_LONG).show();
 
         button2.setOnClickListener(new View.OnClickListener() {
             @Override

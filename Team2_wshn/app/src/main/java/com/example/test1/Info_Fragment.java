@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.test1.Activity.JoinActivity;
 import com.example.test1.PlayUpload.PlayActivity;
 import com.example.test1.PlayUpload.PlayUploadActivity;
 import com.example.test1.PlayUpload.VideoMember;

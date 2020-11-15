@@ -1,5 +1,7 @@
 package com.example.test1.PlayUpload;
 
+import android.graphics.Bitmap;
+
 import com.google.firebase.Timestamp;
 
 import java.io.Serializable;
@@ -13,10 +15,12 @@ public class VideoMember implements Serializable {
     private Double Lat;
     private String UserId;
     private Timestamp uploadTime;
+    private String placeName;
+    //private Bitmap bitmap;
 
     public VideoMember() {}
 
-    public VideoMember(String name, String videourl, String search, Double aLong, Double lat, String userId, Timestamp uploadTime) {
+    public VideoMember(String name, String videourl, String search, Double aLong, Double lat, String userId, Timestamp uploadTime, String placeName) {
         this.name = name;
         Videourl = videourl;
         this.search = search;
@@ -24,6 +28,8 @@ public class VideoMember implements Serializable {
         Lat = lat;
         UserId = userId;
         this.uploadTime = uploadTime;
+        this.placeName = placeName;
+        //this.bitmap = bitmap;
     }
 
     public String getName() {
@@ -81,4 +87,23 @@ public class VideoMember implements Serializable {
     public void setUploadTime(Timestamp uploadTime) {
         this.uploadTime = uploadTime;
     }
+
+    public String getPlaceName() {
+        return placeName;
+    }
+
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
+    }
+
+    /*
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+    */
+
 }
