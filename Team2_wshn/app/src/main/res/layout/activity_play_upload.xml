@@ -4,21 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
     android:orientation="vertical"
     tools:context=".PlayUpload.PlayUploadActivity">
 
 
     <VideoView
+        android:id="@+id/videoView_main"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:id="@+id/videoView_main"
-        android:backgroundTint="@android:color/black"/>
+        android:layout_gravity="center"
+        android:backgroundTint="@android:color/black" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Video name"
+        android:inputType="text"
         android:textSize="20sp"
         android:id="@+id/et_video_name"
         android:layout_margin="10dp"
@@ -29,9 +29,18 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/button_recordVideo"
+        android:text="record video"
+        android:layout_margin="10dp"
+        android:background="@drawable/round_tool"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/button_chooseVideo"
         android:text="choose video"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:background="@drawable/round_tool"
         />
 
@@ -40,22 +49,21 @@
         android:layout_height="wrap_content"
         android:id="@+id/button_upload_main"
         android:text="upload"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:background="@drawable/round_tool"
 
         />
 
     <ProgressBar
+        android:id="@+id/progressBar_main"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_margin="10dp"
         android:indeterminate="true"
-        android:indeterminateTint="@android:color/holo_orange_dark"
-        android:visibility="invisible"
-        android:id="@+id/progressBar_main"
-        />
-
-
+        android:indeterminateBehavior="cycle"
+        android:indeterminateTint="@android:color/holo_purple"
+        android:visibility="invisible" />
 
 </LinearLayout>
 

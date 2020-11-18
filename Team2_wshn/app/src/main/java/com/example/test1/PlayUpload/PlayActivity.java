@@ -81,7 +81,10 @@ public class PlayActivity extends AppCompatActivity {
 
 
         // Query (firestore)
-        Query firestoreQuery = firestore.collection("videos").orderBy("uploadTime");
+        Query firestoreQuery = firestore.collection("videos")
+                .whereEqualTo("long", videoMember.getLong())  // 경도 동일.
+                .whereEqualTo("lat", videoMember.getLat())  // 위도 동일.  whereEqualTo는 다른 필드 가능.
+                .orderBy("uploadTime", Query.Direction.ASCENDING); // Greater/LessThan과 동일 필드만 가능.
 
         // Recycler Options
         FirestoreRecyclerOptions<VideoMember> options = new FirestoreRecyclerOptions.Builder<VideoMember>()

@@ -565,7 +565,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     bundle.putParcelable("장소사진",resizeBitmap);
                     bundle.putDouble("Long",longitude);
                     bundle.putDouble("Lat", latitude);
-                    bundle.putString("UserId", user.getEmail());
+                    bundle.putString("UserId", tv_email.getText().toString());
                     info_fragment.setArguments(bundle); //정보창 fragment로 전달
 
                 } else { //btn_info 버튼 두번 눌렀을때
@@ -606,7 +606,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     bundle.putParcelable("장소사진",myitem.getBitmap());
                     bundle.putDouble("Long",longitude);
                     bundle.putDouble("Lat", latitude);
-                    bundle.putString("UserId", user.getEmail());
+                    bundle.putString("UserId", tv_email.getText().toString());
                     info_fragment.setArguments(bundle); //정보창 fragment로 전달
 
                 } else { //btn_info 버튼 두번 눌렀을때
@@ -638,52 +638,44 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 array.add((Double) document.getData().get("lat")); //위도저장
                                 array2.add((Double) document.getData().get("long")); //경도저장
                                 array3.add((String) document.getData().get("placeName")); //장소이름 저장
-                                //Log.d(TAG, "=="+array.toString() + array2.toString() );
+                                //Log.d(TAG, "=="+array.toString() + array2.toString() + array3.toString() );
                                 //Log.d(TAG, "==>"+size);
                             }
 
-                            for(int i=0; i< size; i++){
-                                latitude = array.get(i);
-                                longitude = array2.get(i);
-                                str = array3.get(i);
+                            ArrayList<Double> array4 = new ArrayList<>(); //arrry (위도)중복체크을 위한 배열
+                            ArrayList<Double> array5 = new ArrayList<>(); //array2 (경도)중복체크을 위한 배열
+                            for(int i=0; i<size; i++){
+                                if(!array4.contains(array.get(i)) && !array5.contains(array2.get(i))){
+                                    array4.add(array.get(i));
+                                    array5.add(array2.get(i));
+                                    latitude = array.get(i);
+                                    longitude = array2.get(i);
+                                    str = array3.get(i);
 
-                                for(int j = i+1 ; j<size; j++){
-                                    if(latitude!=array.get(j) && longitude!=array2.get(j)){
-                                        str = array3.get(i);
-
-                                        List<Address> list = null;
-                                        try {
-                                            list=geocoder.getFromLocation(latitude,longitude,10);
-                                        }catch (IOException e){
-                                            e.printStackTrace();
-                                            Log.e("test","입출력 오류");
-                                        }
-
-                                        if (list != null) {
-                                            if (list.size() == 0) {
-                                                //입력한 주소의 위도경도 값이 없다면
-                                                Toast.makeText(MainActivity.this, "해당되는 주소 정보는 없습니다", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Address address = list.get(0);
-                                                address.setLatitude(latitude);//위도
-                                                address.setLongitude(longitude);//경도
-                                                str2 = address.getAddressLine(0) + "\n"; //상세주소
-                                                //사진
-                                            }
-                                        }
-
-                                        offsetItem = new MyItem(latitude,longitude,str,str2,resizeBitmap);
-                                        mClusterManager.addItem(offsetItem);
-
-                                        latitude = array.get(j);
-                                        longitude = array2.get(j);
-                                        i=j;
+                                    List<Address> list = null;
+                                    try {
+                                        list=geocoder.getFromLocation(latitude,longitude,10);
+                                    }catch (IOException e){
+                                        e.printStackTrace();
+                                        Log.e("test","입출력 오류");
                                     }
+
+                                    if (list != null) {
+                                        if (list.size() == 0) {
+                                            //입력한 주소의 위도경도 값이 없다면
+                                            Toast.makeText(MainActivity.this, "해당되는 주소 정보는 없습니다", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Address address = list.get(0);
+                                            address.setLatitude(latitude);//위도
+                                            address.setLongitude(longitude);//경도
+                                            str2 = address.getAddressLine(0) + "\n"; //상세주소
+                                            //사진없음
+                                        }
+                                    }
+                                    offsetItem = new MyItem(latitude,longitude,str,str2,resizeBitmap);
+                                    mClusterManager.addItem(offsetItem);
                                 }
                             }
-
-
-
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }

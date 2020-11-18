@@ -21,12 +21,13 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        ImageView imageView = (ImageView) findViewById(R.id.loding);
+        ImageView imageView = (ImageView) findViewById(R.id.loading);
 
         Glide.with(this)
                 .load(R.drawable.loading)
                 .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE))
                 .into(new DrawableImageViewTarget(imageView));
+
 
         new Handler().postDelayed(new Runnable() {
             @Override

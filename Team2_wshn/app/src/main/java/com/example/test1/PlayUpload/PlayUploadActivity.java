@@ -3,11 +3,16 @@ package com.example.test1.PlayUpload;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -40,9 +45,12 @@ import java.util.Map;
 public class PlayUploadActivity extends AppCompatActivity {
     private static final String TAG = "PlayUploadActivity";
 
-    private static final int PICK_VIDEO = 1;
+    private static final int PICK_VIDEO = 1, RECORD_VIDEO = 2;
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+
+
     VideoView videoView;
-    Button button, button2;
+    Button button, button2, button3;
     ProgressBar progressBar;
     EditText editText;
     private Uri videoUri;
@@ -65,13 +73,14 @@ public class PlayUploadActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
 
         videoView = findViewById(R.id.videoView_main);
+        button3 = findViewById(R.id.button_recordVideo);
         button = findViewById(R.id.button_upload_main);
         button2 = findViewById(R.id.button_chooseVideo);
         progressBar = findViewById(R.id.progressBar_main);
         editText = findViewById(R.id.et_video_name);
         mediaController = new MediaController(this);
         videoView.setMediaController(mediaController);
-        videoView.start();
+//        videoView.start();
 
         /** 위도 경도 UserId 받음(Main -> Fragment -> this). **/
         videoMember = new VideoMember();
@@ -83,7 +92,21 @@ public class PlayUploadActivity extends AppCompatActivity {
         videoMember.setUserId(bundle.getString("UserId"));
         videoMember.setPlaceName(bundle.getString("장소이름"));
         //videoMember.setBitmap(bundle.getParcelable("장소사진"));
-        Toast.makeText(this,"Long : " + videoMember.getLong() + " Lat : " + videoMember.getLat() + videoMember.getPlaceName(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this,
+                videoMember.getPlaceName()
+                + "\nLong : "
+                + videoMember.getLong()
+                + "\nLat : " + videoMember.getLat()
+                , Toast.LENGTH_LONG).show();
+
+        editText.setHint(videoMember.getPlaceName());
+
+
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { RecordVideo();
+            }
+        });
 
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,20 +120,112 @@ public class PlayUploadActivity extends AppCompatActivity {
                 UploadVideo();
             }
         });
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 
+        videoView.stopPlayback();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_VIDEO || resultCode == RESULT_OK ||
-                data != null || data.getData() != null ){
-            videoUri = data.getData();
-            videoView.setVideoURI(videoUri);
+        if(requestCode == RECORD_VIDEO && resultCode == RESULT_OK) {
+
+            try {
+                videoUri = data.getData();
+                videoView.setVideoURI(videoUri);
+            } catch (Exception e){
+                Toast.makeText(this,"No file selected", Toast.LENGTH_SHORT).show();
+            }
+//            videoView.start();
+        }
+
+        else if (requestCode == PICK_VIDEO && resultCode == RESULT_OK &&
+                data != null && data.getData() != null ){
+            try {
+                videoUri = data.getData();
+                videoView.setVideoURI(videoUri);
+            } catch (Exception e){
+                Toast.makeText(this,"No file selected",Toast.LENGTH_SHORT).show();
+            }
+//            videoView.start();
         }
     }
+
+    public void RecordVideo() {
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            //권한이 부여되면 PERMISSION_GRANTED 거부되면 PERMISSION_DENIED 리턴
+
+//권한 요청 할 필요가 있는가?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CONTACTS)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+                //권한 요청을 해야할 필요가 있는 경우(사용자가 DONT ASK ME AGIAN CHECK + DENY 선택)
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_CONTACTS},
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                //requestPermissions 메소드는 비동기적으로 동작한다. 왜냐면 이 권한 검사 및 요청 메소드는
+                //메인 액티비티에서 동작하기떄문에(메인쓰레드) 사용자 반응성이 굉장히 중요한 파트이다. 여기서 시간을
+                //오래 끌어버리면 사람들이 답답함을 느끼게 된다. requestPermissions의 결과로 콜백 메소드인
+                //onRequestPermissionsResult()가 호출된다. 오버라이딩 메소드이다. Ctrl+O
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+
+
+
+        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // 0 : 저화질  1: 고화질
+            intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 104857600L); // 100mb Limit
+            intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 60); // 영상 녹화 제한 시간 30초.
+            startActivityForResult(intent, RECORD_VIDEO);
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
 
     /** 업로드할 파일 선택 **/
     public void ChooseVideo() {
@@ -126,15 +241,6 @@ public class PlayUploadActivity extends AppCompatActivity {
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
-
-//    public void ShowVideo(Bundle bundle) {
-//
-//        Intent intent = new Intent(PlayUploadActivity.this, ShowVideo.class);
-//        intent.putExtra("myBundle",bundle);
-//        startActivity(intent);
-//        Toast.makeText(this,"PlayUpload액티비티에서 "+ bundle.getString("UserId"), Toast.LENGTH_LONG).show();
-//
-//    }
 
     private void UploadVideo(){
         String videoName = editText.getText().toString();
@@ -178,8 +284,8 @@ public class PlayUploadActivity extends AppCompatActivity {
                                  videoMember_firestore.put("VideoUrl", downloadUrl.toString());
                                  videoMember_firestore.put("userId", bundle.getString("UserId"));
                                  videoMember_firestore.put("Lat",bundle.getDouble("Lat",0));
-                                 videoMember_firestore.put("Lng",bundle.getDouble("Long",0));
-                                 */
+                                 videoMember_firestore.put("Lng",bundle.getDouble("Long",0)); */
+
                                 /** Add a new document with a generated ID */
                                 firestore.collection("videos").document()
                                         .set(videoMember)

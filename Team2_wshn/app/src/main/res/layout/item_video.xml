@@ -24,8 +24,7 @@
             android:id="@+id/exoplayer_item"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_margin="3dp"
-            app:resize_mode="fill"
+            app:resize_mode="fit"
             app:use_controller="true" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

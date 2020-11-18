@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.test1">
     <!-- 카메라 녹화를 위한 권한 -->
-    <uses-permission android:name="android.permission.CAMERA" />
+<!--    <uses-permission android:name="android.permission.CAMERA" />-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 갤러리 읽기 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -21,20 +21,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.SplashActivity">
-            <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
-
+        <activity android:name=".Activity.SplashActivity"/>
         <activity android:name=".PlayUpload.PlayUploadActivity" />
         <activity android:name=".Activity.GalleryActivity" />
         <activity android:name=".Activity.MemberInfoActivity" />
         <activity android:name=".Activity.PasswordResetActivity" />
         <activity android:name=".PlayUpload.PlayActivity"/>
-        <activity android:name=".Activity.MainActivity" >
+        <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -48,8 +41,12 @@
         </activity>
         <activity android:name=".Activity.JoinActivity" />
         <activity android:name=".Camera.CameraActivity" />
-        <activity android:name=".Activity.GoogleLoginActivity"/>
-
+        <activity android:name=".Activity.GoogleLoginActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" /> <!-- 구글맵 API 설정 -->
