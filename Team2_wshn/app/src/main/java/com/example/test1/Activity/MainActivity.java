@@ -648,8 +648,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 if(!array4.contains(array.get(i)) && !array5.contains(array2.get(i))){
                                     array4.add(array.get(i));
                                     array5.add(array2.get(i));
-                                    latitude = array.get(i);
-                                    longitude = array2.get(i);
+                                    if(array.get(i) != null && array2.get(i) !=null){
+                                        latitude = array.get(i);
+                                        longitude = array2.get(i);
+                                    }
                                     str = array3.get(i);
 
                                     List<Address> list = null;

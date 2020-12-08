@@ -29,6 +29,15 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/button_ArRecord"
+        android:text="Ar record"
+        android:layout_margin="10dp"
+        android:background="@drawable/round_tool"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/button_recordVideo"
         android:text="record video"
         android:layout_margin="10dp"
@@ -51,7 +60,6 @@
         android:text="upload"
         android:layout_margin="10dp"
         android:background="@drawable/round_tool"
-
         />
 
     <ProgressBar

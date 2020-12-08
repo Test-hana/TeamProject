@@ -24,6 +24,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.example.test1.Activity.ArActivity;
+import com.example.test1.Activity.GoogleLoginActivity;
+import com.example.test1.Activity.MainActivity;
 import com.example.test1.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,13 +53,12 @@ public class PlayUploadActivity extends AppCompatActivity {
 
 
     VideoView videoView;
-    Button button, button2, button3;
+    Button button, button2, button3, button4;
     ProgressBar progressBar;
     EditText editText;
     private Uri videoUri;
     MediaController mediaController;
     StorageReference storageReference;
-    DatabaseReference databaseReference;
     FirebaseFirestore firestore;
     VideoMember videoMember;
     UploadTask uploadTask;
@@ -69,13 +71,13 @@ public class PlayUploadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play_upload);
 
         storageReference = FirebaseStorage.getInstance().getReference("Videos");
-        databaseReference = FirebaseDatabase.getInstance().getReference("videos");
         firestore = FirebaseFirestore.getInstance();
 
         videoView = findViewById(R.id.videoView_main);
         button3 = findViewById(R.id.button_recordVideo);
         button = findViewById(R.id.button_upload_main);
         button2 = findViewById(R.id.button_chooseVideo);
+        button4 = findViewById(R.id.button_ArRecord);
         progressBar = findViewById(R.id.progressBar_main);
         editText = findViewById(R.id.et_video_name);
         mediaController = new MediaController(this);
@@ -92,12 +94,12 @@ public class PlayUploadActivity extends AppCompatActivity {
         videoMember.setUserId(bundle.getString("UserId"));
         videoMember.setPlaceName(bundle.getString("장소이름"));
         //videoMember.setBitmap(bundle.getParcelable("장소사진"));
-        Toast.makeText(this,
-                videoMember.getPlaceName()
-                + "\nLong : "
-                + videoMember.getLong()
-                + "\nLat : " + videoMember.getLat()
-                , Toast.LENGTH_LONG).show();
+//        Toast.makeText(this,
+//                videoMember.getPlaceName()
+//                + "\nLong : "
+//                + videoMember.getLong()
+//                + "\nLat : " + videoMember.getLat()
+//                , Toast.LENGTH_LONG).show();
 
         editText.setHint(videoMember.getPlaceName());
 
@@ -118,6 +120,14 @@ public class PlayUploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 UploadVideo();
+            }
+        });
+
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PlayUploadActivity.this, ArActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -244,8 +254,10 @@ public class PlayUploadActivity extends AppCompatActivity {
 
     private void UploadVideo(){
         String videoName = editText.getText().toString();
+        if(TextUtils.isEmpty(videoName))
+            editText.setText(videoMember.getPlaceName());
         String search = editText.getText().toString().toLowerCase();
-        if(videoUri != null || !TextUtils.isEmpty(videoName)){
+        if(videoUri != null && !TextUtils.isEmpty(videoName)){
 
             progressBar.setVisibility(View.VISIBLE);
             final StorageReference reference = storageReference.child(System.currentTimeMillis() + "." + getExt(videoUri));
@@ -268,23 +280,13 @@ public class PlayUploadActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Uri downloadUrl = task.getResult();
                                 progressBar.setVisibility(View.INVISIBLE);
-                                Toast.makeText(PlayUploadActivity.this,"Data uploaded", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(PlayUploadActivity.this,"영상이 업로드 되었습니다.", Toast.LENGTH_SHORT).show();
 
                                 videoMember.setName(videoName);
                                 videoMember.setVideourl(downloadUrl.toString());
                                 videoMember.setSearch(search);
                                 videoMember.setUploadTime(Timestamp.now());
 
-                                String i = databaseReference.push().getKey();
-                                databaseReference.child(i).setValue(videoMember);
-
-                                /** firestore 데이터 컬렉션 도큐먼트 생성.
-                                 Map<String, Object> videoMember_firestore = new HashMap<>();
-                                 videoMember_firestore.put("videoName", videoName);
-                                 videoMember_firestore.put("VideoUrl", downloadUrl.toString());
-                                 videoMember_firestore.put("userId", bundle.getString("UserId"));
-                                 videoMember_firestore.put("Lat",bundle.getDouble("Lat",0));
-                                 videoMember_firestore.put("Lng",bundle.getDouble("Long",0)); */
 
                                 /** Add a new document with a generated ID */
                                 firestore.collection("videos").document()
@@ -292,7 +294,7 @@ public class PlayUploadActivity extends AppCompatActivity {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Toast.makeText(PlayUploadActivity.this, "VideoMember Saved", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(PlayUploadActivity.this, "영상 업로드 성공!", Toast.LENGTH_SHORT).show();
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -304,12 +306,12 @@ public class PlayUploadActivity extends AppCompatActivity {
                                         });
 
                             } else {
-                                Toast.makeText(PlayUploadActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(PlayUploadActivity.this, "영상 업로드 실패!", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
         } else {
-            Toast.makeText(this,"All Fields are required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"동영상 파일을 선택해주세요.", Toast.LENGTH_SHORT).show();
         }
     }
 }

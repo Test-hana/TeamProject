@@ -42,8 +42,11 @@ dependencies {
     //구글로그인을 위한
     implementation 'com.google.firebase:firebase-analytics:18.0.0'//파이어베이스 앱 분석
     implementation 'com.google.firebase:firebase-core:18.0.0'//파이어베이스 코어
-    implementation 'com.google.firebase:firebase-auth:20.0.0'//파이어베이스 인증
+    implementation 'com.google.firebase:firebase-auth:20.0.1'//파이어베이스 인증
     implementation 'com.firebaseui:firebase-ui-auth:6.1.0'//파이어베이스 인증2
+    //AR
+    implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.17.1'
+    implementation 'com.google.ar.sceneform:assets:1.15.0'
     // DB
     implementation 'com.google.firebase:firebase-database:19.5.1' //파이어베이스 데이터베이스
     implementation 'com.firebaseui:firebase-ui-database:6.2.0' // 그래들 시 필요
@@ -70,7 +73,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
 
     implementation group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION //for Kakao sdk

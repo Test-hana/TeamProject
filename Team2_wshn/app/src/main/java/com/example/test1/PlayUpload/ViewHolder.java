@@ -32,7 +32,22 @@ class ViewHolder extends RecyclerView.ViewHolder {
     public ViewHolder(@NonNull View itemView) {
 
         super(itemView);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                mClickListener.onItemClick(v, getAdapterPosition());
+
+            }
+        });
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                mClickListener.onItemLongClick(v, getAdapterPosition());
+                return false;
+            }
+        });
     }
 
     public void setExoplayer (Application application, String name, String Videourl) {
@@ -58,4 +73,15 @@ class ViewHolder extends RecyclerView.ViewHolder {
             Log.e("ViewHolder", "exoplayer error" + e.toString());
         }
     }
+
+    private ViewHolder.Clicklistener mClickListener;
+    public interface Clicklistener{
+        void onItemClick(View view, int position);
+        void onItemLongClick(View view, int position);
+    }
+
+    public void setOnClicklistener(ViewHolder.Clicklistener clicklistener) {
+        mClickListener = clicklistener;
+    }
+
 }
